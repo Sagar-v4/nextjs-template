@@ -1,0 +1,6 @@
+coverage
+public
+dist
+*-lock.json
+*-lock.yaml
+*-workspace.yaml
