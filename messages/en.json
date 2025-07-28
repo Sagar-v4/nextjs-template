@@ -1,0 +1,29 @@
+{
+	"ThemeSwitcher": {
+		"Light": "Light",
+		"Dark": "Dark",
+		"System": "System"
+	},
+	"LocaleSwitcher": {
+		"gu": "ગુજરાતી",
+		"en": "English",
+		"label": "Change language"
+	},
+	"Home": {
+		"main": {
+			"li": {
+				"1": "Get started by editing",
+				"2": "Save and see your changes instantly"
+			},
+			"btn": {
+				"1": "Deploy now",
+				"2": "Read our docs"
+			}
+		},
+		"footer": {
+			"1": "Learn",
+			"2": "Examples",
+			"3": "Go to nextjs.org"
+		}
+	}
+}
