@@ -31,7 +31,6 @@ export const metadata: Metadata = {
 		],
 		apple: [{ url: 'assets/apple-icon-180.png' }],
 	},
-	// appleTouchIcon: 'assets/apple-icon-180.png',
 	appleWebApp: {
 		title: 'test',
 		capable: true,
