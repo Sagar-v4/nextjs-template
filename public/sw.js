@@ -25,8 +25,8 @@ const CACHE_NAME = 'nextjs-pwa-v1';
 const STATIC_ASSETS = [
   '/',
   '/manifest.webmanifest',
-  '/assets/manifest-icon-192.maskable.png',
-  '/assets/manifest-icon-512.maskable.png',
+  '/icons/manifest-icon-192.maskable.png',
+  '/icons/manifest-icon-512.maskable.png',
 ];
 
 self.addEventListener('install', (event) => {
