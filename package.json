@@ -32,7 +32,7 @@
 		"gen:pwa-icon-mstiles": "npx pwa-asset-generator public/icon.png public/icons --favicon false --mstile true --quality 100 --icon-only --padding '15%' --background '#0000FF'",
 		"gen:pwa-splash": "npx pwa-asset-generator public/icon.png public/screens  --favicon false --splash-only --quality 100",
 		"gen:pwa-icon": "npx pwa-asset-generator public/icon.png public/icons --favicon false --maskable false --icon-only --padding '15%' --background '#FF0000'",
-		"gen:pwa-icon-maskable": "npx pwa-asset-generator public/icon.png public/icons --opaque false --maskable true --favicon true --icon-only  --background '#00FF00'"
+		"gen:pwa-icon-maskable": "npx pwa-asset-generator public/icon.png public/icons --opaque false --maskable true --favicon true --icon-only --padding '0%'"
 	},
 	"dependencies": {
 		"@radix-ui/react-dialog": "^1.1.14",
