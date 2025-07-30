@@ -6,7 +6,9 @@ const defaultUrl = process.env.VERCEL_URL
 
 export const viewport: Viewport = {
 	maximumScale: 1,
+	initialScale: 1,
 	userScalable: false,
+	viewportFit: 'cover',
 };
 
 export const metadata: Metadata = {
