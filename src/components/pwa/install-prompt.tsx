@@ -1,6 +1,6 @@
 'use client';
 
-import { PlusIcon, ShareIcon } from 'lucide-react';
+import { ShareIcon, SquarePlusIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
@@ -13,120 +13,130 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog';
 
+type BeforeInstallPromptEvent = Event & {
+	prompt: () => Promise<void>;
+	userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+};
+
 export function InstallPrompt() {
 	const [open, setOpen] = useState(false);
-	const [isIOS, setIsIOS] = useState(false);
+	const [isSafari, setIsSafari] = useState(false);
 	const [isStandalone, setIsStandalone] = useState(false);
-	const [deferredPrompt, setDeferredPrompt] = useState<Event | null>(null);
-	const [showPrompt, setShowPrompt] = useState(false);
+	const [deferredPrompt, setDeferredPrompt] =
+		useState<BeforeInstallPromptEvent | null>(null);
 
 	useEffect(() => {
-		// Check iOS and standalone mode
-		setIsIOS(
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			/iPad|iPhone|iPod/.test(navigator.userAgent) && !(window as any).MSStream,
-		);
-		setIsStandalone(window.matchMedia('(display-mode: standalone)').matches);
+		const userAgent = window.navigator.userAgent;
+		const isSafariBrowser =
+			/Safari/.test(userAgent) &&
+			!/Chrome|Chromium|CriOS|FxiOS|EdgiOS|Edg|OPR|Opera/.test(userAgent);
 
-		// Listen for beforeinstallprompt
-		const handler = (e: Event) => {
+		setIsSafari(isSafariBrowser);
+
+		const isInStandaloneMode =
+			window.matchMedia('(display-mode: standalone)').matches ||
+			// @ts-expect-error safari-specific
+			navigator.standalone === true;
+
+		setIsStandalone(isInStandaloneMode);
+
+		const handleBeforeInstallPrompt = (e: Event) => {
 			e.preventDefault();
-			setDeferredPrompt(e);
-			setShowPrompt(true);
+			setDeferredPrompt(e as BeforeInstallPromptEvent);
+			setOpen(true); // Open dialog (for all non-installed cases)
 		};
 
-		window.addEventListener('beforeinstallprompt', handler as EventListener);
+		window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
 
 		return () => {
 			window.removeEventListener(
 				'beforeinstallprompt',
-				handler as EventListener,
+				handleBeforeInstallPrompt,
 			);
 		};
-	}, [open]);
-
-	if (isStandalone) {
-		return null; // Already installed
-	}
+	}, []);
 
 	const handleInstallClick = async () => {
 		if (!deferredPrompt) return;
 
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const promptEvent = deferredPrompt as any; // cast to access .prompt()
+		deferredPrompt.prompt();
 
-		promptEvent.prompt();
-
-		const { outcome } = await promptEvent.userChoice;
+		const { outcome } = await deferredPrompt.userChoice;
 		if (outcome === 'accepted') {
-			toast.info('User accepted the install prompt');
-			setOpen(false);
+			toast.success('App installation accepted');
 		} else {
-			toast.info('User dismissed the install prompt');
+			toast.info('App installation dismissed');
 		}
 
 		setDeferredPrompt(null);
-		setShowPrompt(false);
+		setOpen(false);
 	};
 
+	if (isStandalone) return null;
+
 	return (
-		<Dialog
-			open={open}
-			onOpenChange={setOpen}
-		>
-			<DialogTrigger asChild>
-				<Button variant="outline">Install App</Button>
-			</DialogTrigger>
+		<>
+			{deferredPrompt ? (
+				<Button
+					onClick={handleInstallClick}
+					variant="outline"
+				>
+					Install
+				</Button>
+			) : (
+				<Dialog
+					open={open}
+					onOpenChange={setOpen}
+				>
+					<DialogTrigger asChild>
+						<Button variant="outline">Install</Button>
+					</DialogTrigger>
 
-			<DialogContent>
-				<DialogHeader>
-					<DialogTitle>Install App</DialogTitle>
-					<DialogDescription>
-						Install this app for a better experience on your device.
-					</DialogDescription>
-				</DialogHeader>
+					<DialogContent>
+						<DialogHeader>
+							<DialogTitle>Install</DialogTitle>
+							<DialogDescription>
+								Install this app for a better experience on your device.
+							</DialogDescription>
+						</DialogHeader>
 
-				<div className="flex flex-col justify-center space-y-4 sm:block">
-					{isIOS ? (
-						<div className="text-muted-foreground space-y-2 text-sm">
-							<p>To install this app on iOS:</p>
-							<ol className="list-inside list-decimal space-y-1">
-								<li>
-									<strong>
+						{isSafari ? (
+							<div className="text-muted-foreground space-y-2 text-sm">
+								<p>To install this app on Safari:</p>
+								<ol className="list-inside list-decimal space-y-1">
+									<li>
 										Tap the
-										<ShareIcon
-											className="mx-1 inline h-4 w-4"
-											aria-label="Share icon"
-										/>
-									</strong>
-									Share button in Safari.
-								</li>
-								<li>
-									Scroll down and tap
-									<strong className="mx-1 inline-flex items-center gap-1">
-										Add to Home Screen
-										<PlusIcon
-											className="inline h-4 w-4"
-											aria-label="Plus icon"
-										/>
-									</strong>
-									.
-								</li>
-								<li>
-									Confirm by tapping <strong>Add</strong> on the top-right
-									corner.
-								</li>
-							</ol>
-						</div>
-					) : showPrompt ? (
-						<Button onClick={handleInstallClick}>Add to Home Screen</Button>
-					) : (
-						<p className="text-muted-foreground text-sm">
-							You can install this app from your browser menu.
-						</p>
-					)}
-				</div>
-			</DialogContent>
-		</Dialog>
+										<strong className="mx-1 inline-flex items-center">
+											Share button
+											<ShareIcon
+												className="mx-1 inline size-4"
+												aria-label="Share icon"
+											/>
+										</strong>
+									</li>
+									<li>
+										Scroll down and tap
+										<strong className="mx-1 inline-flex items-center">
+											Add to Home Screen
+											<SquarePlusIcon
+												className="mx-1 inline size-4"
+												aria-label="Square Plus icon"
+											/>
+										</strong>
+									</li>
+									<li>
+										Tap <strong>Add</strong> in the top-right corner.
+									</li>
+								</ol>
+							</div>
+						) : (
+							<p className="text-muted-foreground text-sm">
+								This app can be installed from your browser menu.
+							</p>
+						)}
+					</DialogContent>
+				</Dialog>
+			)}
+		</>
 	);
 }

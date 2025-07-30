@@ -1,6 +1,6 @@
 import { NextIntlClientProvider } from 'next-intl';
 import { getLocale } from 'next-intl/server';
-import { RegisterServiceWorker } from '@/components/register-sw';
+import { ServiceWorkerRegister } from '@/components/pwa/sw-register';
 import { ThemeProvider } from '@/components/theme/provider';
 import { Toaster } from '@/components/ui/sonner';
 import { geistMono, geistSans } from '@/lib/fonts';
@@ -23,7 +23,6 @@ export default async function RootLayout({ children }: Readonly<Props>) {
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				<NextIntlClientProvider>
-					<RegisterServiceWorker />
 					<ThemeProvider
 						attribute="class"
 						defaultTheme="system"
@@ -33,6 +32,7 @@ export default async function RootLayout({ children }: Readonly<Props>) {
 						{children}
 						<Toaster richColors />
 					</ThemeProvider>
+					<ServiceWorkerRegister />
 				</NextIntlClientProvider>
 			</body>
 		</html>

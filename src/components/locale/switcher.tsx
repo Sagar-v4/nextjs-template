@@ -10,8 +10,8 @@ import {
 	SelectTrigger,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
+import { setUserLocale } from '@/actions/locale';
 import { Locale, locales } from '@/i18n/config';
-import { setUserLocale } from '@/services/locale';
 
 interface Props {
 	className?: string;
