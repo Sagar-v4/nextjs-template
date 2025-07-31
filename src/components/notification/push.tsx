@@ -51,12 +51,10 @@ export function PushNotification() {
 				.then((response) => response.json())
 				.then((data) => data.results[0]);
 
+			const title = `${result.name.first} ${result.name.last}`;
 			const options: NotificationOptions = {
-				tag: 'Push Notification Message',
 				body: `${message}`,
-				data: 'Testing data',
-				icon: '/icon.png',
-				badge: result.picture.thumbnail,
+				icon: result.picture.thumbnail,
 				// actions: [
 				// 	{
 				// 		action: 'open',
@@ -64,7 +62,6 @@ export function PushNotification() {
 				// 	},
 				// ],
 			};
-			const title = `${result.name.first} ${result.name.last}`;
 
 			toast.success('Notification sent.');
 			await registration.showNotification(title, options);
