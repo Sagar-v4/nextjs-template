@@ -4,17 +4,27 @@ const defaultUrl = process.env.VERCEL_URL
 	? `https://${process.env.VERCEL_URL}`
 	: 'http://localhost:3000';
 
+export const APP_NAME = 'NextPWA';
+export const APP_DEFAULT_TITLE = 'My Awesome PWA App';
+export const APP_DESCRIPTION = 'Best PWA app in the world!';
+const APP_TITLE_TEMPLATE = '%s - NextPWA';
+
 export const viewport: Viewport = {
-	maximumScale: 1,
+	// maximumScale: 1,
 	initialScale: 1,
 	userScalable: false,
 	// viewportFit: 'cover',
+	// themeColor: '#FFFFFF',
 };
 
 export const metadata: Metadata = {
 	metadataBase: new URL(defaultUrl),
-	title: 'Home',
-	description: 'Nextjs Root Layout',
+	applicationName: APP_NAME,
+	title: {
+		default: APP_DEFAULT_TITLE,
+		template: APP_TITLE_TEMPLATE,
+	},
+	description: APP_DESCRIPTION,
 	icons: {
 		icon: [
 			{ url: 'icons/favicon-196.png', sizes: '196x196', type: 'image/png' },
@@ -22,9 +32,9 @@ export const metadata: Metadata = {
 		apple: [{ url: 'icons/apple-icon-180.png' }],
 	},
 	appleWebApp: {
-		title: 'test',
+		title: APP_DEFAULT_TITLE,
 		capable: true,
-		statusBarStyle: 'black-translucent',
+		statusBarStyle: 'default',
 		startupImage: [
 			{
 				url: 'screens/apple-splash-2048-2732.jpg',
@@ -217,6 +227,26 @@ export const metadata: Metadata = {
 					'(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2) and (orientation: landscape)',
 			},
 		],
+	},
+	formatDetection: {
+		telephone: false,
+	},
+	openGraph: {
+		type: 'website',
+		siteName: APP_NAME,
+		title: {
+			default: APP_DEFAULT_TITLE,
+			template: APP_TITLE_TEMPLATE,
+		},
+		description: APP_DESCRIPTION,
+	},
+	twitter: {
+		card: 'summary',
+		title: {
+			default: APP_DEFAULT_TITLE,
+			template: APP_TITLE_TEMPLATE,
+		},
+		description: APP_DESCRIPTION,
 	},
 	other: {
 		'msapplication-TileColor': '#ffffff',

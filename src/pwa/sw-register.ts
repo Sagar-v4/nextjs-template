@@ -5,12 +5,12 @@ export const getSWRegistration = async (): Promise<
 > => {
 	let registration: ServiceWorkerRegistration | undefined = undefined;
 
-	if ('serviceWorker' in navigator) {
+	if ('serviceWorker' in navigator && typeof window.serwist !== 'undefined') {
 		try {
 			// Get existing registration or register a new one
 			registration = await navigator.serviceWorker.getRegistration();
 			if (!registration) {
-				registration = await navigator.serviceWorker.register('/sw.js');
+				registration = await window.serwist.register();
 			}
 
 			// Optionally trigger update check
