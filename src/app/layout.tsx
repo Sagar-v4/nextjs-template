@@ -22,18 +22,20 @@ export default async function RootLayout({ children }: Readonly<Props>) {
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
-				<NextIntlClientProvider>
-					<ThemeProvider
-						attribute="class"
-						defaultTheme="system"
-						enableSystem
-						disableTransitionOnChange
-					>
-						{children}
-						<Toaster richColors />
-					</ThemeProvider>
+				<>
+					<NextIntlClientProvider>
+						<ThemeProvider
+							attribute="class"
+							defaultTheme="system"
+							enableSystem
+							disableTransitionOnChange
+						>
+							{children}
+							<Toaster richColors />
+						</ThemeProvider>
+					</NextIntlClientProvider>
 					<ServiceWorkerRegister />
-				</NextIntlClientProvider>
+				</>
 			</body>
 		</html>
 	);
