@@ -1,5 +1,4 @@
-import { defaultCache } from '@serwist/next/worker';
-import { Serwist } from 'serwist';
+import { CacheFirst, Serwist, StaleWhileRevalidate } from 'serwist';
 import type { PrecacheEntry, SerwistGlobalConfig } from 'serwist';
 
 // This declares the value of `injectionPoint` to TypeScript.
@@ -23,7 +22,39 @@ const serwist = new Serwist({
 	clientsClaim: true,
 	navigationPreload: true,
 	disableDevLogs: true,
-	runtimeCaching: defaultCache,
+	runtimeCaching: [
+		// Handle images
+		{
+			matcher({ request }) {
+				return request.destination === 'image';
+			},
+			handler: new StaleWhileRevalidate({
+				cacheName: 'images',
+			}),
+		},
+		// Handle scripts
+		{
+			matcher({ request }) {
+				return request.destination === 'script';
+			},
+			handler: new CacheFirst({
+				cacheName: 'scripts',
+			}),
+		},
+		// Handle styles
+		{
+			matcher({ request }) {
+				return request.destination === 'style';
+			},
+			handler: new CacheFirst({
+				cacheName: 'styles',
+			}),
+		},
+	],
 });
+
+serwist.registerCapture(({ sameOrigin }) => {
+	return sameOrigin;
+}, new CacheFirst());
 
 serwist.addEventListeners();

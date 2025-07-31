@@ -2,6 +2,7 @@ import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import { Counter } from '@/components/counter';
 import { LocaleSwitcher } from '@/components/locale/switcher';
+import { PushNotification } from '@/components/notification/push';
 import { InstallPrompt } from '@/components/pwa/install-prompt';
 import { ThemeSwitcher } from '@/components/theme/switcher';
 
@@ -13,6 +14,7 @@ export default async function Home() {
 			<div className="absolute flex w-screen justify-between gap-2 overflow-scroll p-4">
 				<div className="flex gap-2">
 					<Counter />
+					<PushNotification />
 					<InstallPrompt />
 				</div>
 				<div className="flex gap-2">

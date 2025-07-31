@@ -1,3 +1,5 @@
+'use client';
+
 import { toast } from 'sonner';
 
 export type NotificationPermissionStatus =
@@ -12,7 +14,10 @@ export function checkNotificationPermission(): NotificationPermissionStatus {
 }
 
 export async function requestNotificationPermission(): Promise<boolean> {
-	if (typeof Notification === 'undefined') {
+	if (
+		typeof Notification === 'undefined' ||
+		typeof PushManager === 'undefined'
+	) {
 		toast.error('Notifications are not supported in this browser.');
 		return false;
 	}
