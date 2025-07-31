@@ -36,5 +36,53 @@ export default function manifest(): MetadataRoute.Manifest {
 				purpose: 'maskable',
 			},
 		],
+		screenshots: [
+			{
+				src: '/screenshots/light.png',
+				sizes: '1320x2868',
+				type: 'image/png',
+				label: 'Home screen - light',
+			},
+			{
+				src: '/screenshots/dark.png',
+				sizes: '1320x2868',
+				type: 'image/png',
+				label: 'Home screen - dark',
+			},
+		],
+		shortcuts: [
+			{
+				name: 'Home Page',
+				url: '/',
+				description: 'Home page',
+				short_name: 'Home',
+				icons: [
+					{
+						src: 'icons/manifest-icon-192.png',
+						sizes: '192x192',
+						type: 'image/png',
+						purpose: 'any',
+					},
+					{
+						src: 'icons/manifest-icon-192.maskable.png',
+						sizes: '192x192',
+						type: 'image/png',
+						purpose: 'maskable',
+					},
+					{
+						src: 'icons/manifest-icon-512.png',
+						sizes: '512x512',
+						type: 'image/png',
+						purpose: 'any',
+					},
+					{
+						src: 'icons/manifest-icon-512.maskable.png',
+						sizes: '512x512',
+						type: 'image/png',
+						purpose: 'maskable',
+					},
+				],
+			},
+		],
 	};
 }
