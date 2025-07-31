@@ -30,8 +30,10 @@ export function PushNotification() {
 	}, []);
 
 	useEffect(() => {
-		navigator?.setAppBadge(count);
-	}, [count]);
+		if (isNotificationSupported) {
+			navigator?.setAppBadge(count);
+		}
+	}, [count, isNotificationSupported]);
 
 	const sendTestNotification = async () => {
 		if (!message.trim()) {
@@ -40,31 +42,38 @@ export function PushNotification() {
 		}
 
 		try {
-			const registration = await navigator.serviceWorker.ready;
+			const registration = await navigator.serviceWorker?.ready;
+			if (!registration) {
+				toast.error('Registration not found!.');
+				return;
+			}
 			const result = await fetch('https://randomuser.me/api/?inc=name,picture')
 				.then((response) => response.json())
 				.then((data) => data.results[0]);
 
-			const options = {
-				body: `New message from ${result.name.first} ${result.name.last}`,
-				title: `PWA - ${count + 1}`,
-				icon: result.picture.thumbnail,
-				actions: [
-					{
-						action: 'open',
-						title: 'Open the app',
-					},
-				],
+			const options: NotificationOptions = {
+				tag: 'Push Notification Message',
+				body: `${message}`,
+				data: 'Testing data',
+				icon: '/icon.png',
+				badge: result.picture.thumbnail,
+				// actions: [
+				// 	{
+				// 		action: 'open',
+				// 		title: 'Open the app',
+				// 	},
+				// ],
 			};
+			const title = `${result.name.first} ${result.name.last}`;
 
 			toast.success('Notification sent.');
-			await registration.showNotification('Message', options);
+			await registration.showNotification(title, options);
 
 			setMessage('');
 			setCount(count + 1);
 		} catch (err) {
 			toast.error('Failed to send notification.', {
-				description: JSON.stringify(err),
+				description: String(err),
 			});
 		}
 	};
@@ -87,7 +96,7 @@ export function PushNotification() {
 				<Button variant="outline">Manage Notifications</Button>
 			</DialogTrigger>
 
-			<DialogContent className="max-w-md">
+			<DialogContent>
 				{isNotificationSupported ? (
 					<>
 						<DialogHeader>
