@@ -2,10 +2,15 @@
 
 import { useEffect } from 'react';
 import { toast } from 'sonner';
-import { getSWRegistration } from '@/lib/pwa/sw';
+import { getSWRegistration } from '@/pwa/sw-register';
 
-export function ServiceWorkerRegister() {
+interface Props {
+	registerManually?: boolean;
+}
+
+export function ServiceWorkerRegister({ registerManually }: Props) {
 	useEffect(() => {
+		if (!registerManually) return;
 		const handleLoad = () => {
 			getSWRegistration().then((registration) => {
 				if (registration) {
@@ -41,7 +46,7 @@ export function ServiceWorkerRegister() {
 		return () => {
 			window.removeEventListener('load', handleLoad);
 		};
-	}, []);
+	}, [registerManually]);
 
 	return null;
 }

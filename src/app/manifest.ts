@@ -1,10 +1,11 @@
+import { APP_DEFAULT_TITLE, APP_DESCRIPTION, APP_NAME } from '@/meta/root';
 import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
 	return {
-		name: 'Next.js PWA',
-		short_name: 'NextPWA',
-		description: 'A Progressive Web App built with Next.js',
+		name: APP_DEFAULT_TITLE,
+		short_name: APP_NAME,
+		description: APP_DESCRIPTION,
 		start_url: '/',
 		display: 'standalone',
 		background_color: '#ffffff',
@@ -33,6 +34,20 @@ export default function manifest(): MetadataRoute.Manifest {
 				sizes: '512x512',
 				type: 'image/png',
 				purpose: 'maskable',
+			},
+		],
+		screenshots: [
+			{
+				src: 'screenshots/home-light.png',
+				sizes: '1320x2868',
+				type: 'image/png',
+				label: 'Home screen - light',
+			},
+			{
+				src: 'screenshots/home-dark.png',
+				sizes: '1320x2868',
+				type: 'image/png',
+				label: 'Home screen - dark',
 			},
 		],
 	};
