@@ -38,13 +38,13 @@ export default function manifest(): MetadataRoute.Manifest {
 		],
 		screenshots: [
 			{
-				src: 'screenshots/light.png',
+				src: 'screenshots/home-light.png',
 				sizes: '1320x2868',
 				type: 'image/png',
 				label: 'Home screen - light',
 			},
 			{
-				src: 'screenshots/dark.png',
+				src: 'screenshots/home-dark.png',
 				sizes: '1320x2868',
 				type: 'image/png',
 				label: 'Home screen - dark',
